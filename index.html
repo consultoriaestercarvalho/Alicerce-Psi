@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
 <title>Alicerce Psi — Estrutura digital para psicólogos</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-256.png" sizes="256x256">
+<link rel="apple-touch-icon" href="favicon-256.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ── RESET ── */
@@ -65,6 +68,11 @@ nav{
   opacity:.55;transition:opacity .2s;padding:0;
 }
 .nav-links button:hover,.nav-links button.active{opacity:1}
+.nav-diag-link{
+  font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cinza);font-weight:400;opacity:.55;transition:opacity .2s;
+}
+.nav-diag-link:hover{opacity:1}
 .nav-links button.active{color:var(--musgo)}
 .nav-cta{
   font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;
@@ -82,16 +90,24 @@ nav{
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 .mobile-menu{
   display:none;position:fixed;inset:0;z-index:350;background:var(--creme);
-  flex-direction:column;justify-content:center;align-items:center;gap:2.8rem;
+  flex-direction:column;justify-content:center;align-items:center;gap:clamp(1rem,4vh,2.8rem);
   opacity:0;pointer-events:none;transition:opacity .3s;
+  overflow-y:auto;padding:6rem 1.5rem 2rem;
 }
 .mobile-menu.open{opacity:1;pointer-events:all}
 .mobile-menu button{
-  font-family:var(--serif);font-size:2.8rem;font-weight:400;
+  font-family:var(--serif);font-size:clamp(1.7rem,7vh,2.8rem);font-weight:400;
   text-transform:uppercase;letter-spacing:.08em;
   background:none;border:none;color:var(--musgo);opacity:.4;transition:opacity .2s;
+  flex-shrink:0;
 }
 .mobile-menu button.active,.mobile-menu button:hover{opacity:1}
+.mobile-diag-link{
+  font-family:var(--serif);font-size:clamp(1.7rem,7vh,2.8rem);font-weight:400;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:var(--musgo);opacity:.4;transition:opacity .2s;flex-shrink:0;
+}
+.mobile-diag-link:hover{opacity:1}
 
 /* PAGE DOTS */
 .page-dots{
@@ -104,6 +120,15 @@ nav{
   transition:background .3s,transform .3s;border:none;padding:0;
 }
 .dot.active{background:var(--musgo);transform:scale(1.5)}
+.page-dots.on-dark .dot{background:rgba(245,241,235,.35)}
+.page-dots.on-dark .dot.active{background:var(--areia)}
+
+/* REVEAL ON SCROLL (usado em várias páginas) */
+.reveal{
+  opacity:0;transform:translateY(22px);
+  transition:opacity .8s cubic-bezier(.16,.8,.24,1),transform .8s cubic-bezier(.16,.8,.24,1);
+}
+.reveal.in{opacity:1;transform:translateY(0)}
 
 /* PAGE TRANSITION OVERLAY */
 .overlay{
@@ -120,83 +145,140 @@ nav{
 .overlay.out .overlay-col{transform-origin:bottom;transform:scaleY(0)}
 
 /* ── PAGE 1: HOME ── */
-#p-home{background:var(--creme)}
+#p-home{background:#141a11}
 .home-wrap{
-  min-height:100vh;
-  display:grid;grid-template-columns:55% 45%;
+  position:relative;overflow:hidden;
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  background:#141a11;
 }
-.home-left{
-  display:flex;flex-direction:column;
-  justify-content:flex-end;
-  padding:8rem 4rem 4rem;
+
+/* cena arquitetônica de fundo */
+.hero-scene{
+  position:absolute;inset:0;width:100%;height:100%;
+  transform:scale(1.07);
+  animation:heroZoom 3.5s cubic-bezier(.2,.7,.2,1) forwards;
 }
-.home-tag{
-  font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--areia);margin-bottom:1.8rem;font-weight:500;
+@keyframes heroZoom{to{transform:scale(1)}}
+.hero-scene .glow{animation:heroGlow 6s ease-in-out infinite alternate}
+@keyframes heroGlow{
+  from{opacity:.55}
+  to{opacity:1}
 }
-.home-title{
+.hero-vignette{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 42%,rgba(20,26,17,0) 0%,rgba(20,26,17,.55) 68%,rgba(15,19,13,.92) 100%);
+  pointer-events:none;
+}
+.hero-grain{
+  position:absolute;inset:0;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* conteúdo central */
+.hero-content{
+  position:relative;z-index:2;text-align:center;
+  padding:0 2rem;max-width:760px;
+}
+.hero-tag{
+  font-size:.62rem;letter-spacing:.36em;text-transform:uppercase;
+  color:var(--areia);margin-bottom:1.6rem;font-weight:500;
+  opacity:0;animation:heroUp .9s ease forwards;animation-delay:.5s;
+}
+.hero-title{
   font-family:var(--serif);font-weight:500;
-  font-size:clamp(3rem,6.5vw,6rem);
-  line-height:1.05;letter-spacing:-.01em;
-  color:var(--musgo);margin-bottom:1.4rem;
+  font-size:clamp(2.4rem,7vw,5.2rem);
+  line-height:1.08;letter-spacing:-.01em;
+  color:var(--creme);
+  opacity:0;animation:heroUp 1.1s ease forwards;animation-delay:.75s;
 }
-.home-title em{font-style:italic;font-weight:300;color:var(--petroleo)}
-.home-rule{width:48px;height:2px;background:var(--areia);margin-bottom:1.6rem}
-.home-sub{
-  font-size:.88rem;line-height:1.85;color:var(--cinza);
-  max-width:420px;margin-bottom:3rem;font-weight:300;
+.hero-title em{font-style:italic;font-weight:300;color:var(--areia)}
+.hero-rule{
+  width:0;height:1px;background:var(--areia);margin:1.7rem auto;
+  animation:heroRule 1s ease forwards;animation-delay:1.5s;
 }
-.home-actions{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+@keyframes heroRule{to{width:56px}}
+.hero-sub{
+  font-size:.85rem;line-height:1.8;color:rgba(245,241,235,.72);
+  max-width:420px;margin:0 auto 2.4rem;font-weight:300;
+  opacity:0;animation:heroUp .9s ease forwards;animation-delay:1.35s;
+}
+.hero-actions{
+  display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap;
+  opacity:0;animation:heroUp .9s ease forwards;animation-delay:1.7s;
+}
+@keyframes heroUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
 .btn-primary{
   background:var(--musgo);color:var(--creme);
   padding:.95rem 2.2rem;border:none;
   font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
-  font-weight:400;transition:background .25s;
+  font-weight:400;transition:background .25s,transform .25s;
 }
-.btn-primary:hover{background:var(--petroleo)}
+.btn-primary:hover{background:var(--petroleo);transform:translateY(-2px)}
 .btn-ghost{
-  background:none;border:1px solid rgba(47,59,42,.3);
-  color:var(--musgo);
+  background:none;border:1px solid rgba(245,241,235,.35);
+  color:var(--creme);
   padding:.95rem 2.2rem;
   font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
-  font-weight:400;transition:border-color .25s,color .25s;
+  font-weight:400;transition:border-color .25s,color .25s,transform .25s;
 }
-.btn-ghost:hover{border-color:var(--musgo)}
+.btn-ghost:hover{border-color:var(--creme);transform:translateY(-2px)}
 
-.home-right{
-  position:relative;overflow:hidden;
-  background:var(--musgo);
+/* painéis laterais, como no modelo de referência */
+.hero-side{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:2;font-size:.72rem;line-height:1.7;
+  opacity:0;animation:heroFade 1.2s ease forwards;animation-delay:2rem;
+  color:rgba(245,241,235,.82);
 }
-.home-right-inner{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  padding:3rem;
-  text-align:center;
+@keyframes heroFade{to{opacity:1}}
+.hero-side-label{
+  font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--areia);margin-bottom:.6rem;font-weight:500;
 }
-/* The A monogram — big, architectural, as signature */
-.mono-a{
-  width:200px;height:180px;
-  margin-bottom:2.5rem;
-  opacity:.18;
+.hero-side.left{left:3rem}
+.hero-side.right{right:3rem;text-align:right}
+.hero-side a{color:var(--creme);border-bottom:1px solid rgba(245,241,235,.3);transition:border-color .2s}
+.hero-side a:hover{border-color:var(--creme)}
+
+.hero-scroll-cue{
+  position:absolute;bottom:2.4rem;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:.6rem;
+  opacity:0;animation:heroFade 1s ease forwards;animation-delay:2.3rem;
 }
-.home-right-quote{
-  font-family:var(--serif);font-style:italic;
-  font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:300;
-  color:var(--creme);line-height:1.5;
-  max-width:300px;
-  position:relative;z-index:1;
-  opacity:.9;
+.hero-scroll-cue span{
+  font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(245,241,235,.55);
 }
-.home-right-attr{
-  margin-top:1.2rem;font-size:.6rem;letter-spacing:.2em;
-  text-transform:uppercase;color:rgba(201,167,124,.7);
-  position:relative;z-index:1;
+.hero-scene,.hero-tag,.hero-title,.hero-rule,.hero-sub,.hero-actions,.hero-side,.hero-scroll-cue{
+  animation-play-state:running;
 }
+.home-wrap.replay .hero-scene,
+.home-wrap.replay .hero-tag,
+.home-wrap.replay .hero-title,
+.home-wrap.replay .hero-rule,
+.home-wrap.replay .hero-sub,
+.home-wrap.replay .hero-actions,
+.home-wrap.replay .hero-side,
+.home-wrap.replay .hero-scroll-cue{
+  animation:none;
+}
+.hero-scroll-cue .line{width:1px;height:26px;background:rgba(245,241,235,.35);position:relative;overflow:hidden}
+.hero-scroll-cue .line::after{
+  content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;
+  background:var(--areia);animation:scrollCue 2.2s ease-in-out infinite;
+}
+@keyframes scrollCue{
+  0%{top:-100%} 60%{top:100%} 100%{top:100%}
+}
+
 /* ── PAGE 2: SERVIÇOS ── */
 #p-servicos{background:var(--creme)}
 .servicos-wrap{
   min-height:100vh;
+  min-height:100dvh;
   padding:8rem 4rem 4rem;
 }
 .sec-eyebrow{
@@ -220,7 +302,7 @@ nav{
 .servico-card{
   background:var(--creme);padding:2.8rem 2.4rem;
   position:relative;overflow:hidden;
-  transition:background .3s;
+  transition:background .3s,transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;
   cursor:default;
 }
 .servico-card::before{
@@ -228,7 +310,7 @@ nav{
   background:var(--areia);transform:scaleY(0);transform-origin:bottom;
   transition:transform .4s cubic-bezier(.4,0,.2,1);
 }
-.servico-card:hover{background:#eee9e2}
+.servico-card:hover{background:#eee9e2;transform:translateY(-6px);box-shadow:0 20px 40px -20px rgba(47,59,42,.25)}
 .servico-card:hover::before{transform:scaleY(1)}
 
 .servico-num{
@@ -261,6 +343,7 @@ nav{
 #p-sobre{background:var(--musgo)}
 .sobre-wrap{
   min-height:100vh;
+  min-height:100dvh;
   display:grid;grid-template-columns:1fr 1fr;
 }
 .sobre-left{
@@ -340,6 +423,7 @@ nav{
 #p-processo{background:var(--creme)}
 .processo-wrap{
   min-height:100vh;
+  min-height:100dvh;
   padding:8rem 4rem 4rem;
 }
 .processo-intro{
@@ -401,6 +485,7 @@ nav{
 #p-contato{background:var(--creme)}
 .contato-wrap{
   min-height:100vh;
+  min-height:100dvh;
   display:grid;grid-template-columns:1fr 1fr;
 }
 .contato-left{
@@ -495,10 +580,10 @@ nav{
   .nav-links{display:none}
   .hamburger{display:flex}
   .mobile-menu{display:flex}
-  .home-wrap,.sobre-wrap,.contato-wrap{grid-template-columns:1fr}
-  .home-right{height:55vw;max-height:380px;order:-1}
-  .home-right-inner{padding:2rem}
-  .home-left{padding:2rem 2rem 3rem}
+  .sobre-wrap,.contato-wrap{grid-template-columns:1fr}
+  .hero-side{display:none}
+  .hero-scroll-cue{display:none}
+  .form-group input,.form-group select,.form-group textarea{font-size:16px}
   .servicos-wrap,.processo-wrap{padding:5rem 2rem 3rem}
   .servicos-grid{grid-template-columns:1fr}
   .processo-intro{grid-template-columns:1fr;gap:1.5rem;margin-bottom:3rem}
@@ -513,7 +598,7 @@ nav{
 @media(max-width:600px){
   .processo-steps{grid-template-columns:1fr}
   .form-row{grid-template-columns:1fr}
-  .home-actions{flex-direction:column;align-items:flex-start}
+  .hero-actions{flex-direction:column;align-items:stretch}
   .btn-primary,.btn-ghost{width:100%;text-align:center}
 }
 </style>
@@ -533,7 +618,6 @@ nav{
     <svg viewBox="0 0 52 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <!-- A monogram: architectural triangle with descending curve to LICERCE baseline -->
       <path d="M26 4 L44 36 H8 Z" fill="none" stroke="#2F3B2A" stroke-width="1.4" stroke-linejoin="round"/>
-      <path d="M8 36 Q6 40 4 40" fill="none" stroke="#C9A77C" stroke-width="1.2" stroke-linecap="round"/>
     </svg>
     <div class="nav-logo-text">
       <span class="nav-logo-name">Alicerce Psi</span>
@@ -545,6 +629,7 @@ nav{
     <li><button data-page="servicos" onclick="goTo('servicos')">Serviços</button></li>
     <li><button data-page="sobre" onclick="goTo('sobre')">Sobre</button></li>
     <li><button data-page="processo" onclick="goTo('processo')">Processo</button></li>
+    <li><a href="diagnostico.html" class="nav-diag-link">Diagnóstico</a></li>
     <li><button class="nav-cta" onclick="goTo('contato')">Fale conosco</button></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
@@ -556,11 +641,12 @@ nav{
   <button onclick="mobileGoTo('servicos')">Serviços</button>
   <button onclick="mobileGoTo('sobre')">Sobre</button>
   <button onclick="mobileGoTo('processo')">Processo</button>
+  <a href="diagnostico.html" class="mobile-diag-link">Diagnóstico</a>
   <button onclick="mobileGoTo('contato')">Contato</button>
 </div>
 
 <!-- PAGE DOTS -->
-<div class="page-dots">
+<div class="page-dots on-dark" id="pageDots">
   <button class="dot active" onclick="goTo('home')" title="Início"></button>
   <button class="dot" onclick="goTo('servicos')" title="Serviços"></button>
   <button class="dot" onclick="goTo('sobre')" title="Sobre"></button>
@@ -569,7 +655,7 @@ nav{
 </div>
 
 <!-- FOOTER STRIP -->
-<div class="footer-strip" id="footerStrip">
+<div class="footer-strip dark" id="footerStrip">
   <span>Serra Talhada · PE · Brasil</span>
   <span>agenciaalicerceopsi@gmail.com</span>
 </div>
@@ -577,39 +663,95 @@ nav{
 <!-- ══ PAGE: HOME ══ -->
 <div class="page active" id="p-home">
   <div class="home-wrap">
-    <div class="home-left">
-      <p class="home-tag">Estrutura digital para psicólogos</p>
-      <h1 class="home-title">Cuidamos da estrutura,<br>você cuida das<br><em>pessoas.</em></h1>
-      <div class="home-rule"></div>
-      <p class="home-sub">Sites, automações e gestão para que o seu consultório funcione com mais clareza — e você tenha mais tempo para o que realmente importa: o paciente.</p>
-      <div class="home-actions">
+
+    <svg class="hero-scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#10150d"/>
+          <stop offset="55%" stop-color="#1c2417"/>
+          <stop offset="100%" stop-color="#0a0d08"/>
+        </linearGradient>
+        <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#242c1d" stop-opacity="0.85"/>
+          <stop offset="100%" stop-color="#0a0d08" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="glowGrad" cx="50%" cy="38%" r="45%">
+          <stop offset="0%" stop-color="#C9A77C" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#C9A77C" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="pillarGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3d4a34"/>
+          <stop offset="100%" stop-color="#141a10"/>
+        </linearGradient>
+        <filter id="softBlur"><feGaussianBlur stdDeviation="12"/></filter>
+      </defs>
+
+      <rect width="1600" height="900" fill="url(#bgGrad)"/>
+
+      <!-- colunas — esquerda -->
+      <rect x="40" y="260" width="90" height="560" fill="url(#pillarGrad)" opacity="0.9"/>
+      <rect x="210" y="330" width="64" height="430" fill="url(#pillarGrad)" opacity="0.82"/>
+      <rect x="345" y="390" width="44" height="330" fill="url(#pillarGrad)" opacity="0.75"/>
+      <!-- colunas — direita (espelhadas) -->
+      <rect x="1470" y="260" width="90" height="560" fill="url(#pillarGrad)" opacity="0.9"/>
+      <rect x="1326" y="330" width="64" height="430" fill="url(#pillarGrad)" opacity="0.82"/>
+      <rect x="1211" y="390" width="44" height="330" fill="url(#pillarGrad)" opacity="0.75"/>
+
+      <!-- pontos de luz -->
+      <circle class="glow" cx="85" cy="252" r="9" fill="#C9A77C" opacity="0.55" filter="url(#softBlur)"/>
+      <circle class="glow" cx="1515" cy="252" r="9" fill="#C9A77C" opacity="0.55" filter="url(#softBlur)"/>
+
+      <!-- piso reflexivo -->
+      <rect x="0" y="560" width="1600" height="340" fill="url(#floorGrad)"/>
+
+      <!-- glow atrás do triângulo -->
+      <ellipse class="glow" cx="800" cy="380" rx="420" ry="300" fill="url(#glowGrad)"/>
+
+      <!-- triângulo — motivo da marca, como um pedimento arquitetônico -->
+      <path class="glow" d="M800 160 L1010 480 H590 Z" fill="none" stroke="#C9A77C" stroke-width="1.6" opacity="0.55"/>
+      <path d="M800 160 L1010 480 H590 Z" fill="none" stroke="#F5F1EB" stroke-width="0.6" opacity="0.22"/>
+    </svg>
+    <div class="hero-vignette"></div>
+    <div class="hero-grain"></div>
+
+    <div class="hero-content">
+      <p class="hero-tag">Estrutura digital para psicólogos</p>
+      <h1 class="hero-title">Cuidamos da estrutura,<br>você cuida das <em>pessoas.</em></h1>
+      <div class="hero-rule"></div>
+      <p class="hero-sub">Sites, automações e gestão para que o seu consultório funcione com mais clareza — e você tenha mais tempo para o que realmente importa: o paciente.</p>
+      <div class="hero-actions">
         <button class="btn-primary" onclick="goTo('servicos')">Ver serviços</button>
         <button class="btn-ghost" onclick="goTo('contato')">Falar conosco</button>
       </div>
     </div>
-    <div class="home-right">
-      <div class="home-right-inner">
-        <svg class="mono-a" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M100 10 L180 165 H20 Z" fill="none" stroke="#F5F1EB" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M20 165 Q10 175 5 178" fill="none" stroke="#C9A77C" stroke-width="2.5" stroke-linecap="round"/>
-          <text x="42" y="162" font-family="Cormorant Garamond, serif" font-size="14" fill="#F5F1EB" letter-spacing="8" font-weight="300" opacity="0.6">LICERCE</text>
-        </svg>
-        <p class="home-right-quote">"A estrutura liberta o cuidado."</p>
-        <p class="home-right-attr">Alicerce Psi — Consultoria Digital</p>
-      </div>
+
+    <div class="hero-side left">
+      <div class="hero-side-label">Atuação —</div>
+      <div>100% remoto<br>Para psicólogos em<br>todo o Brasil</div>
     </div>
+    <div class="hero-side right">
+      <div class="hero-side-label">Contato —</div>
+      <div><a href="mailto:agenciaalicerceopsi@gmail.com">agenciaalicerceopsi@gmail.com</a></div>
+    </div>
+
+    <div class="hero-scroll-cue">
+      <span>Explorar</span>
+      <div class="line"></div>
+    </div>
+
   </div>
 </div>
+
 
 <!-- ══ PAGE: SERVIÇOS ══ -->
 <div class="page" id="p-servicos">
   <div class="servicos-wrap">
-    <p class="sec-eyebrow">O que oferecemos</p>
-    <h2 class="sec-title">Serviços para o<br><em>seu consultório</em></h2>
+    <p class="sec-eyebrow reveal">O que oferecemos</p>
+    <h2 class="sec-title reveal" style="transition-delay:.08s">Serviços para o<br><em>seu consultório</em></h2>
     <div class="sec-rule"></div>
 
     <div class="servicos-grid">
-      <div class="servico-card">
+      <div class="servico-card reveal" style="transition-delay:0.00s">
         <div class="servico-num">01</div>
         <h3 class="servico-title">Site Profissional</h3>
         <p class="servico-desc">Seu consultório merece uma presença digital à altura do cuidado que você oferece. Criamos sites exclusivos, pensados para transmitir credibilidade e facilitar o primeiro contato do paciente.</p>
@@ -621,7 +763,7 @@ nav{
         </ul>
       </div>
 
-      <div class="servico-card">
+      <div class="servico-card reveal" style="transition-delay:0.08s">
         <div class="servico-num">02</div>
         <h3 class="servico-title">Automações</h3>
         <p class="servico-desc">Menos tempo respondendo mensagens, confirmando sessões e cobrando manualmente. Configuramos fluxos automáticos que trabalham pelo consultório enquanto você está na sessão.</p>
@@ -633,7 +775,7 @@ nav{
         </ul>
       </div>
 
-      <div class="servico-card">
+      <div class="servico-card reveal" style="transition-delay:0.16s">
         <div class="servico-num">03</div>
         <h3 class="servico-title">Gestão do Consultório</h3>
         <p class="servico-desc">Organização da operação administrativa do consultório — sem tocar na prática clínica. Controle financeiro claro, processos definidos e previsibilidade no mês.</p>
@@ -645,7 +787,7 @@ nav{
         </ul>
       </div>
 
-      <div class="servico-card">
+      <div class="servico-card reveal" style="transition-delay:0.24s">
         <div class="servico-num">04</div>
         <h3 class="servico-title">Capacitação Digital</h3>
         <p class="servico-desc">Para quem quer aprender a operar suas próprias ferramentas. Treinamos o psicólogo no uso de agenda online, organização de conteúdo educativo ético e gestão do consultório no dia a dia.</p>
@@ -669,8 +811,8 @@ nav{
       <svg class="sobre-bg-a" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 10 L180 165 H20 Z" fill="none" stroke="#F5F1EB" stroke-width="1.5" stroke-linejoin="round"/>
       </svg>
-      <p class="sobre-tag">Quem está por trás</p>
-      <h2 class="sobre-title">Estrutura com<br><em>propósito</em>.</h2>
+      <p class="sobre-tag reveal">Quem está por trás</p>
+      <h2 class="sobre-title reveal" style="transition-delay:.08s">Estrutura com<br><em>propósito</em>.</h2>
       <div class="sobre-rule"></div>
       <div class="sobre-desc">
         <p>O Alicerce Psi nasceu de uma convicção simples: psicólogos não deveriam perder tempo com burocracia quando há pacientes precisando de cuidado.</p>
@@ -685,17 +827,17 @@ nav{
     </div>
     <div class="sobre-right">
       <p class="sobre-missao">Nossa missão</p>
-      <blockquote class="sobre-quote">"Cuidamos da estrutura, você cuida das pessoas."</blockquote>
+      <blockquote class="sobre-quote reveal">"Cuidamos da estrutura, você cuida das pessoas."</blockquote>
       <ul class="sobre-lista">
-        <li>
+        <li class="reveal" style="transition-delay:0.00s">
           <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
           Não comercializamos saúde mental — apenas a estrutura técnica e administrativa ao redor da prática clínica.
         </li>
-        <li>
+        <li class="reveal" style="transition-delay:0.10s">
           <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
           Nunca usamos linguagem de "vendas" ou "leads" — o vocabulário respeita a singularidade da profissão.
         </li>
-        <li>
+        <li class="reveal" style="transition-delay:0.20s">
           <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
           Cada solução é personalizada — nenhum consultório tem a mesma estrutura que outro.
         </li>
@@ -709,8 +851,8 @@ nav{
   <div class="processo-wrap">
     <div class="processo-intro">
       <div>
-        <p class="sec-eyebrow">Como trabalhamos</p>
-        <h2 class="sec-title">Do primeiro contato<br>à <em>entrega</em></h2>
+        <p class="sec-eyebrow reveal">Como trabalhamos</p>
+        <h2 class="sec-title reveal" style="transition-delay:.08s">Do primeiro contato<br>à <em>entrega</em></h2>
         <div class="sec-rule"></div>
       </div>
       <div class="processo-intro-right">
@@ -719,27 +861,27 @@ nav{
     </div>
 
     <div class="processo-steps">
-      <div class="pstep">
+      <div class="pstep reveal" style="transition-delay:0.00s">
         <div class="pstep-num">1</div>
         <div class="pstep-name">Conversa</div>
         <p class="pstep-desc">Ouvimos com calma o que já existe, o que falta e onde você quer chegar.</p>
       </div>
-      <div class="pstep">
+      <div class="pstep reveal" style="transition-delay:0.08s">
         <div class="pstep-num">2</div>
         <div class="pstep-name">Diagnóstico</div>
         <p class="pstep-desc">Mapeamos o que existe, o que falta e o que pode ser melhorado na estrutura digital.</p>
       </div>
-      <div class="pstep">
+      <div class="pstep reveal" style="transition-delay:0.16s">
         <div class="pstep-num">3</div>
         <div class="pstep-name">Proposta</div>
         <p class="pstep-desc">Apresentamos um plano específico para a realidade do consultório — com prazo e valores claros.</p>
       </div>
-      <div class="pstep">
+      <div class="pstep reveal" style="transition-delay:0.24s">
         <div class="pstep-num">4</div>
         <div class="pstep-name">Execução</div>
         <p class="pstep-desc">Construímos, configuramos e testamos cada parte da estrutura com acompanhamento próximo.</p>
       </div>
-      <div class="pstep">
+      <div class="pstep reveal" style="transition-delay:0.32s">
         <div class="pstep-num">5</div>
         <div class="pstep-name">Continuidade</div>
         <p class="pstep-desc">Ajustes, atualizações e suporte — para que a estrutura continue funcionando no dia a dia.</p>
@@ -760,8 +902,8 @@ nav{
       <svg class="contato-left-bg" viewBox="0 0 200 180" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M100 10 L180 165 H20 Z" fill="none" stroke="#F5F1EB" stroke-width="1.5" stroke-linejoin="round"/>
       </svg>
-      <p class="contato-tag">Fale conosco</p>
-      <h2 class="contato-title">Vamos<br><em>conversar?</em></h2>
+      <p class="contato-tag reveal">Fale conosco</p>
+      <h2 class="contato-title reveal" style="transition-delay:.08s">Vamos<br><em>conversar?</em></h2>
       <div class="contato-rule"></div>
       <p class="contato-desc">Escolha o canal que preferir — WhatsApp, e-mail ou o formulário ao lado.</p>
       <div class="contato-links">
@@ -784,20 +926,20 @@ nav{
       <p>Preencha e entraremos em contato em até 24h.</p>
       <form id="contactForm">
         <div class="form-row">
-          <div class="form-group">
+          <div class="form-group reveal" style="transition-delay:0.00s">
             <label>Nome</label>
             <input type="text" name="nome" required placeholder="Seu nome">
           </div>
-          <div class="form-group">
+          <div class="form-group reveal" style="transition-delay:0.07s">
             <label>WhatsApp</label>
             <input type="tel" name="whatsapp" placeholder="(00) 00000-0000">
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group reveal" style="transition-delay:0.14s">
           <label>E-mail</label>
           <input type="email" name="email" required placeholder="seu@email.com">
         </div>
-        <div class="form-group">
+        <div class="form-group reveal" style="transition-delay:0.21s">
           <label>Interesse</label>
           <select name="interesse">
             <option value="">Selecione um serviço</option>
@@ -808,7 +950,7 @@ nav{
             <option>Ainda tenho dúvidas</option>
           </select>
         </div>
-        <div class="form-group">
+        <div class="form-group reveal" style="transition-delay:0.28s">
           <label>Mensagem (opcional)</label>
           <textarea name="mensagem" placeholder="Conte um pouco sobre o seu consultório..."></textarea>
         </div>
@@ -835,9 +977,19 @@ function goTo(id) {
     document.getElementById('p-' + id).classList.add('active');
     current = id;
     updateNav();
+    if (id === 'home') replayHero();
+    else setupReveal(id);
     ov.className = 'overlay out';
     setTimeout(() => { ov.className = 'overlay'; transitioning = false; }, 600);
   }, 600);
+}
+
+function replayHero() {
+  const wrap = document.querySelector('.home-wrap');
+  if (!wrap) return;
+  wrap.classList.add('replay');
+  void wrap.offsetWidth; // força reflow para reiniciar as animações CSS
+  wrap.classList.remove('replay');
 }
 
 function updateNav() {
@@ -848,8 +1000,36 @@ function updateNav() {
     d.classList.toggle('active', PAGES[i] === current);
   });
   const strip = document.getElementById('footerStrip');
-  strip.classList.toggle('dark', current === 'sobre' || current === 'contato');
+  strip.classList.toggle('dark', current === 'home' || current === 'sobre' || current === 'contato');
+  document.getElementById('pageDots').classList.toggle('on-dark', current === 'home');
 }
+
+// ── REVEAL ON SCROLL ──
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('in');
+  });
+}, { threshold: 0.15 });
+
+function setupReveal(id) {
+  document.querySelectorAll('#p-' + id + ' .reveal').forEach(el => {
+    el.classList.remove('in');
+    revealObserver.unobserve(el);
+    revealObserver.observe(el);
+  });
+}
+
+// Abre direto na página indicada na URL (ex: index.html#servicos)
+(function () {
+  const hash = window.location.hash.replace('#', '');
+  if (PAGES.includes(hash) && hash !== 'home') {
+    document.getElementById('p-home').classList.remove('active');
+    document.getElementById('p-' + hash).classList.add('active');
+    current = hash;
+    updateNav();
+  }
+  setupReveal(current);
+})();
 
 // ── HAMBURGER ──
 function toggleMenu() {
