@@ -6,10 +6,15 @@
     <title>Alicerce Psi | Estrutura Digital para Psicólogos</title>
     <meta name="description" content="Cuidamos da estrutura, você cuida das pessoas. Consultoria de estrutura digital para psicólogos.">
     
+    <!-- Favicons adicionados conforme solicitado -->
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="favicon-256.png" sizes="256x256">
+    <link rel="apple-touch-icon" href="favicon-256.png">
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         /* ─── DESIGN TOKENS E MODO ESCURO ─── */
@@ -25,6 +30,7 @@
             
             --font-heading: 'Cormorant Garamond', serif;
             --font-body: 'Inter', sans-serif;
+            --font-creative: 'Montserrat', sans-serif;
             
             --space-2: 8px;
             --space-4: 16px;
@@ -32,8 +38,6 @@
             --space-8: 32px;
             --space-12: 48px;
             --space-16: 64px;
-            --space-24: 96px;
-            --space-32: 128px;
             
             --transition-base: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             --radius-sm: 8px;
@@ -54,89 +58,48 @@
 
         /* ─── RESET & BASE ─── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; font-size: 16px; background: var(--color-bg-primary); transition: background-color var(--transition-base); }
+        html { scroll-behavior: smooth; font-size: 16px; }
         body {
             font-family: var(--font-body);
             color: var(--color-text-main);
-            background-color: var(--color-bg-primary);
+            background: radial-gradient(circle at 50% 0%, var(--color-bg-secondary) 0%, var(--color-bg-primary) 60%);
+            background-attachment: fixed;
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            transition: background-color var(--transition-base), color var(--transition-base);
-            cursor: none; /* Oculta o cursor padrão no desktop */
+            transition: background var(--transition-base), color var(--transition-base);
+            cursor: none; 
         }
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-heading);
-            font-weight: 500;
-            line-height: 1.15;
-            color: var(--color-text-main);
-            transition: color var(--transition-base);
-        }
+        h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 500; line-height: 1.15; color: var(--color-text-main); transition: color var(--transition-base); }
         button { cursor: none; font-family: var(--font-body); background: transparent; }
         a { cursor: none; color: inherit; text-decoration: none; transition: opacity var(--transition-base); }
         img, video { max-width: 100%; height: auto; display: block; }
 
         /* ─── CURSOR CUSTOMIZADO ─── */
         .custom-cursor {
-            position: fixed;
-            top: 0; left: 0;
-            width: 32px; height: 32px;
-            border: 1px solid var(--color-accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
+            position: fixed; top: 0; left: 0; width: 32px; height: 32px;
+            border: 1px solid var(--color-accent); border-radius: 50%;
+            pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
             transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
-        .custom-cursor::after {
-            content: '';
-            width: 4px; height: 4px;
-            background-color: var(--color-accent);
-            border-radius: 50%;
-            transition: opacity 0.3s ease;
-        }
-        .custom-cursor.hover {
-            width: 64px; height: 64px;
-            background-color: rgba(90, 107, 90, 0.05);
-            border-color: rgba(90, 107, 90, 0.3);
-        }
+        .custom-cursor::after { content: ''; width: 4px; height: 4px; background-color: var(--color-accent); border-radius: 50%; transition: opacity 0.3s ease; }
+        .custom-cursor.hover { width: 64px; height: 64px; background-color: rgba(90, 107, 90, 0.05); border-color: rgba(90, 107, 90, 0.3); }
         .custom-cursor.hover::after { opacity: 0; }
         [data-theme="dark"] .custom-cursor.hover { background-color: rgba(201, 167, 124, 0.1); border-color: rgba(201, 167, 124, 0.4); }
         
-        @media (max-width: 1024px) {
-            body { cursor: auto; }
-            button, a { cursor: pointer; }
-            .custom-cursor { display: none; }
-        }
+        @media (max-width: 1024px) { body { cursor: auto; } button, a { cursor: pointer; } .custom-cursor { display: none; } }
 
         /* ─── ESTRUTURA SPA ─── */
-        .page {
-            position: fixed; inset: 0; opacity: 0; pointer-events: none;
-            transition: opacity .65s cubic-bezier(.4,0,.2,1);
-            overflow-y: auto; overflow-x: hidden;
-            background-color: var(--color-bg-primary);
-        }
+        .page { position: fixed; inset: 0; opacity: 0; pointer-events: none; transition: opacity .65s cubic-bezier(.4,0,.2,1); overflow-y: auto; overflow-x: hidden; }
         .page.active { opacity: 1; pointer-events: all; }
-        .page-content-wrap {
-            min-height: 100dvh;
-            padding-top: clamp(100px, 12vh, 140px);
-            padding-bottom: var(--space-16);
-            display: flex; flex-direction: column;
-        }
+        .page-content-wrap { min-height: 100dvh; padding-top: clamp(100px, 12vh, 140px); padding-bottom: var(--space-16); display: flex; flex-direction: column; }
 
         /* ─── PAGE TRANSITION OVERLAY ─── */
         .overlay { position: fixed; inset: 0; z-index: 500; pointer-events: none; display: grid; grid-template-columns: 1fr 1fr 1fr; }
-        .overlay-col {
-            background: var(--color-accent); transform: scaleY(0); transform-origin: top;
-            transition: transform .6s cubic-bezier(0.76, 0, 0.24, 1), background-color var(--transition-base);
-        }
-        .overlay-col:nth-child(2) { transition-delay: .06s; }
-        .overlay-col:nth-child(3) { transition-delay: .12s; }
-        .overlay.in .overlay-col { transform: scaleY(1); }
-        .overlay.out .overlay-col { transform-origin: bottom; transform: scaleY(0); }
+        .overlay-col { background: var(--color-accent); transform: scaleY(0); transform-origin: top; transition: transform .6s cubic-bezier(0.76, 0, 0.24, 1), background-color var(--transition-base); }
+        .overlay-col:nth-child(2) { transition-delay: .06s; } .overlay-col:nth-child(3) { transition-delay: .12s; }
+        .overlay.in .overlay-col { transform: scaleY(1); } .overlay.out .overlay-col { transform-origin: bottom; transform: scaleY(0); }
 
         /* ─── PAGE DOTS ─── */
         .page-dots { position: fixed; right: 2.2rem; top: 50%; transform: translateY(-50%); z-index: 290; display: flex; flex-direction: column; gap: 1rem; }
@@ -144,11 +107,12 @@
         .dot.active { background: var(--color-accent); transform: scale(1.8); }
         @media (max-width: 1000px) { .page-dots { display: none; } }
 
+        /* ─── REVEAL ANIMATION ─── */
+        .reveal-el { opacity: 0; transform: translateY(24px); transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); }
+        .reveal-el.visible { opacity: 1; transform: translateY(0); }
+
         /* ─── TYPOGRAPHY UTILS ─── */
-        .tag {
-            font-family: var(--font-body); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em;
-            font-weight: 500; color: var(--color-text-muted); display: inline-block; margin-bottom: var(--space-4);
-        }
+        .tag { font-family: var(--font-body); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 500; color: var(--color-text-muted); display: inline-block; margin-bottom: var(--space-4); }
         .heading-1 { font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -0.02em; margin-bottom: var(--space-6); line-height: 1.05; }
         .heading-1 em { font-style: italic; color: var(--color-accent); font-weight: 400; }
         .heading-2 { font-size: clamp(2rem, 5vw, 3.2rem); letter-spacing: -0.01em; }
@@ -160,128 +124,88 @@
         .section { padding: clamp(4rem, 10vw, 8rem) 0; }
 
         /* ─── HEADER ─── */
-        .header {
-            position: fixed; top: 0; left: 0; width: 100%; padding: var(--space-6) 0;
-            background: var(--color-overlay); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            z-index: 300; border-bottom: 1px solid transparent; transition: border-color var(--transition-base), background-color var(--transition-base), padding 0.3s ease;
-        }
+        .header { position: fixed; top: 0; left: 0; width: 100%; padding: var(--space-6) 0; background: var(--color-overlay); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 300; border-bottom: 1px solid transparent; transition: border-color var(--transition-base), background-color var(--transition-base), padding 0.3s ease; }
         .header.scrolled { padding: 1rem 0; border-bottom-color: var(--color-border); }
         .header__nav { display: flex; justify-content: space-between; align-items: center; }
-        
         .logo { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 600; letter-spacing: 0.05em; }
         .logo-symbol { width: 24px; height: 24px; position: relative; }
-        .logo-symbol::before {
-            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            border-left: 12px solid transparent; border-right: 12px solid transparent;
-            border-bottom: 20px solid var(--color-text-main); transition: border-bottom-color var(--transition-base);
-        }
-        .logo-symbol::after {
-            content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
-            width: 12px; height: 1px; background: var(--color-bg-primary); transition: background-color var(--transition-base);
-        }
-        
+        .logo-symbol::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 20px solid var(--color-text-main); transition: border-bottom-color var(--transition-base); }
+        .logo-symbol::after { content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 12px; height: 1px; background: var(--color-bg-primary); transition: background-color var(--transition-base); }
         .nav-tools { display: flex; align-items: center; gap: 2rem; }
-        .nav-links { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
-        .nav-links button, .theme-toggle {
-            background: none; border: none; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-            color: var(--color-text-main); font-weight: 500; opacity: 0.6; transition: opacity 0.3s, color 0.3s;
-            display: inline-block;
-        }
+        .nav-links { list-style: none; display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links button, .theme-toggle { background: none; border: none; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-text-main); font-weight: 500; opacity: 0.6; transition: opacity 0.3s, color 0.3s; display: inline-block; }
         .nav-links button:hover, .nav-links button.active, .theme-toggle:hover { opacity: 1; color: var(--color-accent); }
-        
-        /* Tema Toggle Icon */
         .theme-toggle { width: 20px; height: 20px; position: relative; opacity: 1; color: var(--color-text-main); }
         .theme-toggle svg { width: 100%; height: 100%; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.5s ease; }
-        
-        /* Mobile Hamburger */
         .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 0; z-index: 400; }
         .hamburger span { display: block; width: 24px; height: 1px; background: var(--color-text-main); transition: transform .3s, opacity .3s, background-color var(--transition-base); }
-        .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-        .hamburger.open span:nth-child(2) { opacity: 0; }
-        .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
-        .mobile-menu {
-            display: none; position: fixed; inset: 0; z-index: 350; background: var(--color-bg-primary);
-            flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem;
-            opacity: 0; pointer-events: none; transition: opacity .4s, background-color var(--transition-base);
-        }
+        .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); } .hamburger.open span:nth-child(2) { opacity: 0; } .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+        .mobile-menu { display: none; position: fixed; inset: 0; z-index: 350; background: var(--color-bg-primary); flex-direction: column; justify-content: center; align-items: center; gap: 2.5rem; opacity: 0; pointer-events: none; transition: opacity .4s, background-color var(--transition-base); }
         .mobile-menu.open { opacity: 1; pointer-events: all; }
         .mobile-menu button { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 500; letter-spacing: 0.05em; color: var(--color-text-main); opacity: 0.4; transition: opacity 0.3s, color 0.3s; }
         .mobile-menu button.active, .mobile-menu button:hover { opacity: 1; color: var(--color-accent); }
+        @media(max-width: 768px) { .nav-links { display: none; } .nav-tools { gap: 1rem; } .hamburger { display: flex; } .mobile-menu { display: flex; } }
 
-        @media(max-width: 768px) {
-            .nav-links { display: none; }
-            .nav-tools { gap: 1rem; }
-            .hamburger { display: flex; }
-            .mobile-menu { display: flex; }
-        }
-
-        /* ─── HERO SECTION ─── */
-        .hero { text-align: center; }
-        .hero__video-wrapper {
-            margin-top: clamp(2rem, 6vw, 4rem);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-soft);
-            width: 100%; max-width: 900px;
-            margin-left: auto; margin-right: auto;
-            background-color: var(--color-bg-secondary);
-            aspect-ratio: 16 / 9; position: relative;
-            transition: box-shadow var(--transition-base), background-color var(--transition-base);
-        }
+        /* ─── HERO E HOME FOOTER ─── */
+        .hero { text-align: center; margin-bottom: 2rem; }
+        .hero__video-wrapper { margin-top: clamp(2rem, 6vw, 4rem); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); width: 100%; max-width: 900px; margin-left: auto; margin-right: auto; background-color: var(--color-bg-secondary); aspect-ratio: 16 / 9; position: relative; transition: box-shadow var(--transition-base), background-color var(--transition-base); }
         .hero__video-wrapper video { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+        
+        .home-simple-footer { margin-top: auto; padding: 2rem 0; text-align: center; font-family: var(--font-body); border-top: 1px solid var(--color-border); }
+        .home-simple-footer p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0.5rem 0; }
+        .home-simple-footer strong { color: var(--color-text-main); font-weight: 600; }
+        .footer-credits span { color: #5bc0be; }
 
-        /* ─── ABOUT SECTION ─── */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(3rem, 8vw, 6rem); align-items: start; }
-        .about-text p { margin-bottom: 1.5rem; font-size: clamp(1rem, 2vw, 1.05rem); color: var(--color-text-muted); line-height: 1.8; }
-        .about-text p:first-of-type { font-size: clamp(1.15rem, 3vw, 1.35rem); color: var(--color-text-main); line-height: 1.6; }
+        /* ─── ABOUT SECTION ENRIQUECIDO ─── */
+        .about-layout { display: flex; flex-direction: column; align-items: center; text-align: center; max-width: 800px; margin: 0 auto; }
+        .about-text { font-family: var(--font-creative); margin-top: 2rem; }
+        .about-text p { margin-bottom: 1.8rem; font-size: 1.1rem; font-weight: 400; color: var(--color-text-muted); line-height: 1.9; }
+        .about-quote { background: var(--color-bg-secondary); padding: 3rem 2rem; border-radius: var(--radius-lg); margin: 4rem 0 2rem; font-family: var(--font-heading); font-size: clamp(1.4rem, 3vw, 1.8rem); line-height: 1.4; font-style: italic; color: var(--color-text-main); border: 1px solid var(--color-border); }
+        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; text-align: left; width: 100%; margin-top: 2rem; }
+        .value-block { padding-left: 1.5rem; border-left: 3px solid var(--color-accent); }
+        .value-block h4 { margin-bottom: 0.5rem; font-family: var(--font-creative); font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .value-block p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; margin: 0; }
 
-        /* ─── SERVICES SECTION ─── */
+        /* ─── SERVICES E PROCESSO SECTION ─── */
         .services-bg { background-color: var(--color-bg-secondary); border-radius: var(--radius-lg); padding: clamp(4rem, 8vw, 6rem) 0; margin: 0 clamp(1rem, 3vw, 2rem); transition: background-color var(--transition-base); }
         .services-header { text-align: center; margin-bottom: clamp(3rem, 6vw, 5rem); max-width: 600px; margin-inline: auto; }
-        
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-        .service-card {
-            background: var(--color-bg-primary); padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem);
-            border-radius: var(--radius-md); border: 1px solid var(--color-border);
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s, border-color var(--transition-base), background-color var(--transition-base);
-            height: 100%; display: flex; flex-direction: column;
-        }
-        .service-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-soft); border-color: var(--color-accent); }
+        .service-card { background: var(--color-bg-primary); padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem); border-radius: var(--radius-md); border: 1px solid var(--color-border); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s, border-color var(--transition-base), background-color var(--transition-base); height: 100%; display: flex; flex-direction: column; }
+        .service-card:hover { transform: scale(1.05) translateY(-8px); box-shadow: var(--shadow-soft); border-color: var(--color-accent); }
         .service-icon { font-family: var(--font-heading); font-size: 2rem; color: var(--color-accent); margin-bottom: 1.5rem; line-height: 1; font-style: italic; }
         .service-card h3 { margin-bottom: 1rem; }
         .service-card p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.7; flex-grow: 1; }
         .service-list { margin-top: 1.5rem; list-style: none; }
-        .service-list li {
-            font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem;
-            padding-left: 1.2rem; position: relative; line-height: 1.6;
-        }
+        .service-list li { font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem; padding-left: 1.2rem; position: relative; line-height: 1.6; }
         .service-list li::before { content: '—'; position: absolute; left: 0; color: var(--color-accent); }
 
-        /* ─── POSICIONAMENTO E ECOSSISTEMA DIGITAL ─── */
+        /* ─── NEW: PROCESSO SECTION ─── */
+        .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .process-card { background: var(--color-bg-secondary); padding: 2.5rem 2rem; border-radius: var(--radius-md); position: relative; overflow: hidden; border: 1px solid var(--color-border); transition: transform 0.3s, background-color var(--transition-base); }
+        .process-number { font-family: var(--font-heading); font-size: 3.5rem; font-style: italic; color: var(--color-accent); opacity: 0.15; position: absolute; top: 1rem; right: 1.5rem; line-height: 1; pointer-events: none; }
+        .process-card h3 { margin-bottom: 1rem; font-size: 1.3rem; position: relative; z-index: 1; }
+        .process-card p { font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.7; position: relative; z-index: 1; }
+        
+        .process-cta { margin-top: 4rem; padding: 4rem 2rem; background: var(--color-text-main); border-radius: var(--radius-lg); text-align: center; }
+        .process-cta p { color: var(--color-bg-primary); font-size: clamp(1.2rem, 3vw, 1.5rem); margin-bottom: 2rem; font-family: var(--font-creative); font-weight: 300; }
+        .btn-light { display: inline-block; padding: 1rem 2.5rem; background: var(--color-bg-primary); color: var(--color-text-main); border-radius: 100px; font-weight: 600; font-family: var(--font-creative); text-transform: uppercase; letter-spacing: 0.1em; transition: transform 0.3s; }
+        .btn-light:hover { transform: translateY(-3px); }
+
+        /* ─── CONTACT SECTION ─── */
+        .contact-wrap { max-width: 600px; margin: 0 auto; width: 100%; background: var(--color-bg-secondary); padding: 3rem; border-radius: var(--radius-lg); border: 1px solid var(--color-border); }
+        .contact-header { text-align: center; margin-bottom: 3rem; }
+        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; text-align: left; }
+        .form-group label { margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 500; color: var(--color-text-main); letter-spacing: 0.05em; text-transform: uppercase; }
+        .form-control { width: 100%; padding: 1rem 1.2rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-bg-primary); color: var(--color-text-main); font-family: var(--font-creative); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+        .form-control:focus { outline: none; border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(90, 107, 90, 0.1); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+        .btn-submit { width: 100%; padding: 1.2rem; margin-top: 1rem; background: var(--color-text-main); color: var(--color-bg-primary); border: none; border-radius: 100px; font-weight: 600; font-family: var(--font-creative); letter-spacing: 0.1em; text-transform: uppercase; transition: transform 0.3s, background-color var(--transition-base); }
+        .btn-submit:hover { transform: translateY(-3px); background-color: var(--color-accent); }
+
+        /* ─── POSICIONAMENTO E FOOTER GLOBAL ─── */
         .diff-section { text-align: center; max-width: 800px; margin: 0 auto; }
         .diff-section blockquote { font-family: var(--font-heading); font-size: clamp(1.6rem, 4vw, 2.8rem); line-height: 1.3; color: var(--color-text-main); margin: 2.5rem 0; font-style: italic; }
-        
-        .ecosystem-banner {
-            margin-top: clamp(4rem, 10vw, 8rem);
-            padding: clamp(3rem, 6vw, 4rem) 2rem;
-            background: var(--color-bg-secondary);
-            border-radius: var(--radius-lg);
-            text-align: center;
-            border: 1px solid var(--color-border);
-            transition: background-color var(--transition-base), border-color var(--transition-base);
-        }
-        .ecosystem-banner h3 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1rem; }
-        .ecosystem-banner p { color: var(--color-text-muted); max-width: 500px; margin: 0 auto 2rem; font-size: 0.95rem; }
-        .btn-instagram {
-            display: inline-flex; align-items: center; gap: 0.8rem;
-            padding: 1rem 2rem; background: var(--color-text-main); color: var(--color-bg-primary);
-            border-radius: 100px; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
-            font-weight: 500; transition: transform 0.3s, background-color var(--transition-base), color var(--transition-base);
-        }
-        .btn-instagram:hover { transform: scale(1.05); }
 
-        /* ─── FOOTER ─── */
         .footer { border-top: 1px solid var(--color-border); padding: clamp(4rem, 8vw, 6rem) 0 2rem; margin-top: auto; transition: border-color var(--transition-base); }
         .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
         .footer-brand p { margin-top: 1.5rem; font-size: 0.95rem; color: var(--color-text-muted); max-width: 320px; line-height: 1.8; }
@@ -289,9 +213,7 @@
         .footer-info p { font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 0.5rem; }
         .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid var(--color-border); font-size: 0.8rem; color: var(--color-text-muted); transition: border-color var(--transition-base); }
 
-        /* ─── MOBILE FIXES (Refinando tipografia e layout) ─── */
         @media (max-width: 768px) {
-            .about-grid { grid-template-columns: 1fr; gap: 3rem; }
             .services-bg { margin: 0; border-radius: 0; padding: 4rem 0; }
             .service-card { padding: 2.5rem 1.5rem; }
             .diff-section blockquote { font-size: 1.8rem; }
@@ -299,47 +221,38 @@
             .footer-info { text-align: left; }
             .footer-bottom { flex-direction: column; gap: 1rem; align-items: flex-start; }
             .page-content-wrap { padding-top: 100px; }
-            .hero__content { text-align: left; }
-            .hero__video-wrapper { aspect-ratio: 4 / 3; margin-top: 2.5rem; border-radius: var(--radius-md); }
-            .ecosystem-banner { text-align: left; padding: 2.5rem 1.5rem; }
+            .contact-wrap { padding: 2rem 1.5rem; border-radius: var(--radius-md); }
+            .about-quote { padding: 2rem 1.5rem; }
+            .process-cta { padding: 3rem 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Cursor Customizado -->
     <div class="custom-cursor" id="custom-cursor"></div>
 
-    <!-- OVERLAY (Efeito Cortina SPA) -->
     <div class="overlay" id="overlay">
-        <div class="overlay-col"></div>
-        <div class="overlay-col"></div>
-        <div class="overlay-col"></div>
+        <div class="overlay-col"></div><div class="overlay-col"></div><div class="overlay-col"></div>
     </div>
 
-    <!-- 1. Cabeçalho (Header) -->
+    <!-- HEADER -->
     <header class="header" id="header">
         <div class="container header__nav">
             <div class="logo magnetic-el" onclick="goTo('home')">
-                <div class="logo-symbol"></div>
-                Alicerce Psi
+                <div class="logo-symbol"></div> Alicerce Psi
             </div>
-            
             <div class="nav-tools">
                 <ul class="nav-links">
                     <li><button class="active magnetic-el" data-page="home" onclick="goTo('home')">Início</button></li>
                     <li><button class="magnetic-el" data-page="sobre" onclick="goTo('sobre')">Sobre</button></li>
                     <li><button class="magnetic-el" data-page="servicos" onclick="goTo('servicos')">Serviços</button></li>
+                    <li><button class="magnetic-el" data-page="processo" onclick="goTo('processo')">Processo</button></li>
                     <li><button class="magnetic-el" data-page="posicionamento" onclick="goTo('posicionamento')">Posicionamento</button></li>
+                    <li><button class="magnetic-el" data-page="contato" onclick="goTo('contato')">Contato</button></li>
                 </ul>
-
-                <!-- Theme Toggle Button -->
                 <button class="theme-toggle magnetic-el" id="theme-btn" aria-label="Alternar tema">
-                    <svg id="theme-icon" viewBox="0 0 24 24">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
+                    <svg id="theme-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
-
                 <button class="hamburger magnetic-el" id="hamburger" onclick="toggleMenu()">
                     <span></span><span></span><span></span>
                 </button>
@@ -352,7 +265,9 @@
         <button class="active" onclick="mobileGoTo('home')">Início</button>
         <button onclick="mobileGoTo('sobre')">Sobre</button>
         <button onclick="mobileGoTo('servicos')">Serviços</button>
+        <button onclick="mobileGoTo('processo')">Processo</button>
         <button onclick="mobileGoTo('posicionamento')">Posicionamento</button>
+        <button onclick="mobileGoTo('contato')">Contato</button>
     </div>
 
     <!-- PAGE DOTS -->
@@ -360,46 +275,79 @@
         <button class="dot active magnetic-el" onclick="goTo('home')" title="Início"></button>
         <button class="dot magnetic-el" onclick="goTo('sobre')" title="Sobre"></button>
         <button class="dot magnetic-el" onclick="goTo('servicos')" title="Serviços"></button>
+        <button class="dot magnetic-el" onclick="goTo('processo')" title="Processo"></button>
         <button class="dot magnetic-el" onclick="goTo('posicionamento')" title="Posicionamento"></button>
+        <button class="dot magnetic-el" onclick="goTo('contato')" title="Contato"></button>
     </div>
 
     <!-- ========================================== -->
-    <!-- PÁGINA 1: INÍCIO (HERO VIDEO)              -->
+    <!-- PÁGINA 1: INÍCIO                           -->
     <!-- ========================================== -->
     <div class="page active" id="p-home">
-        <div class="page-content-wrap" style="justify-content: center;">
-            <section class="hero container">
-                <div class="hero__content">
-                    <span class="tag">ALICERCE PSI</span>
-                    <h1 class="heading-1">Cuidamos da <em>estrutura</em>,<br>você cuida das pessoas.</h1>
-                    <p class="text-lead">Construímos a base digital e administrativa do seu consultório.</p>
-                    
-                    <div class="hero__video-wrapper interactive-el">
-                        <video id="hero-video" muted playsinline loop preload="metadata">
-                            <source src="video-animacao.mp4" type="video/mp4">
-                            Seu navegador não suporta vídeos.
-                        </video>
+        <div class="page-content-wrap" style="justify-content: space-between;">
+            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                <section class="hero container">
+                    <div class="hero__content">
+                        <span class="tag reveal-el" style="transition-delay: 0s;">ALICERCE PSI</span>
+                        <h1 class="heading-1 reveal-el" style="transition-delay: 0.1s;">Cuidamos da <em>estrutura</em>,<br>você cuida das pessoas.</h1>
+                        <p class="text-lead reveal-el" style="transition-delay: 0.2s;">Construímos a base digital e administrativa do seu consultório.</p>
+                        
+                        <div class="hero__video-wrapper interactive-el reveal-el" style="transition-delay: 0.3s;">
+                            <video id="hero-video" muted playsinline loop preload="metadata">
+                                <source src="video-animacao.mp4" type="video/mp4">
+                                Seu navegador não suporta vídeos.
+                            </video>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
+            
+            <div class="home-simple-footer container reveal-el" style="transition-delay: 0.4s;">
+                <p>&copy; Copyright <strong>Alicerce Psi</strong> All Rights Reserved</p>
+                <p class="footer-credits">Designed by <span>Ester Carvalho</span> Distributed by <span>Alicerce Psi</span></p>
+            </div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- PÁGINA 2: SOBRE                            -->
+    <!-- PÁGINA 2: SOBRE (Enriquecida)              -->
     <!-- ========================================== -->
     <div class="page" id="p-sobre">
         <div class="page-content-wrap" style="justify-content: center;">
             <section class="section container" id="sobre">
-                <div class="about-grid">
-                    <div>
+                <div class="about-layout">
+                    <div class="reveal-el" style="transition-delay: 0s;">
                         <span class="tag">QUEM SOMOS</span>
-                        <h2 class="heading-2" style="margin-bottom: var(--space-6);">A estrutura que sustenta<br>tudo sem aparecer.</h2>
+                        <h2 class="heading-2">A estrutura que sustenta<br>tudo sem aparecer.</h2>
                     </div>
+                    
                     <div class="about-text">
-                        <p>O Alicerce Psi não é uma agência de marketing. Não é uma plataforma de tecnologia. É uma consultoria de estrutura digital criada com um propósito muito específico: dar suporte administrativo e técnico aos psicólogos que perdem tempo demais com burocracia e de menos com o que realmente importa: o paciente.</p>
-                        <p>A marca nasce de uma convicção ética: saúde mental não se vende. O que se constrói é a estrutura ao redor dela — o site que apresenta o profissional com credibilidade, o sistema que confirma a sessão sem que ele precise olhar para o celular, o painel que mostra quanto vai entrar no mês sem que ele precise fazer as contas na cabeça.</p>
-                        <p>O <em>Psi</em> delimita o nicho com precisão. Não é para qualquer profissional, não é para empresas genéricas. É para psicólogos. Esse recorte não é uma limitação; é respeito pela especificidade da profissão.</p>
+                        <p class="reveal-el" style="transition-delay: 0.1s;">O Alicerce Psi não é uma agência de marketing. Não é uma plataforma de tecnologia. É uma consultoria de estrutura digital criada com um propósito muito específico: dar suporte administrativo e técnico aos psicólogos que perdem tempo demais com burocracia e de menos com o que realmente importa: o paciente.</p>
+                    </div>
+
+                    <!-- Novo Bloco de Citação -->
+                    <div class="about-quote reveal-el" style="transition-delay: 0.2s;">
+                        "A marca nasce de uma convicção ética: saúde mental não se vende. O que se constrói é a estrutura ao redor dela."
+                    </div>
+
+                    <div class="about-text">
+                        <p class="reveal-el" style="transition-delay: 0.3s;">O <em>Psi</em> delimita o nicho com precisão. Não é para qualquer profissional, não é para empresas genéricas. É para psicólogos. Esse recorte não é uma limitação; é respeito pela especificidade da profissão.</p>
+                    </div>
+
+                    <!-- Novos Blocos de Valores -->
+                    <div class="values-grid">
+                        <div class="value-block reveal-el" style="transition-delay: 0.4s;">
+                            <h4>Ética</h4>
+                            <p>Nunca atuamos na parte clínica. O trabalho é só na estrutura administrativa e técnica ao redor da prática.</p>
+                        </div>
+                        <div class="value-block reveal-el" style="transition-delay: 0.5s;">
+                            <h4>Personalização</h4>
+                            <p>Nenhum consultório tem a mesma rotina que outro — cada estrutura é pensada sob medida.</p>
+                        </div>
+                        <div class="value-block reveal-el" style="transition-delay: 0.6s;">
+                            <h4>Sobriedade</h4>
+                            <p>Sem promessa de crescimento acelerado. Só estrutura de verdade, no ritmo que faz sentido pra você.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -413,13 +361,13 @@
         <div class="page-content-wrap">
             <div class="services-bg">
                 <section class="section container" id="servicos">
-                    <div class="services-header">
+                    <div class="services-header reveal-el" style="transition-delay: 0s;">
                         <span class="tag">O QUE FAZEMOS</span>
                         <h2 class="heading-2">Estrutura digital para consultórios de psicologia.</h2>
                     </div>
                     
                     <div class="services-grid">
-                        <div class="service-card interactive-el">
+                        <div class="service-card interactive-el reveal-el" style="transition-delay: 0.1s;">
                             <div class="service-icon">I</div>
                             <h3 class="heading-3">Site Profissional</h3>
                             <p>Site exclusivo para o consultório, com design alinhado à identidade do psicólogo e focado na usabilidade do paciente.</p>
@@ -430,7 +378,7 @@
                             </ul>
                         </div>
                         
-                        <div class="service-card interactive-el">
+                        <div class="service-card interactive-el reveal-el" style="transition-delay: 0.2s;">
                             <div class="service-icon">II</div>
                             <h3 class="heading-3">Automações</h3>
                             <p>Fluxos automáticos que cuidam do operacional, devolvendo o tempo para o profissional focar na clínica.</p>
@@ -442,7 +390,7 @@
                             </ul>
                         </div>
                         
-                        <div class="service-card interactive-el">
+                        <div class="service-card interactive-el reveal-el" style="transition-delay: 0.3s;">
                             <div class="service-icon">III</div>
                             <h3 class="heading-3">Gestão do Consultório</h3>
                             <p>Organização da parte administrativa sem tocar na prática clínica.</p>
@@ -454,7 +402,7 @@
                             </ul>
                         </div>
                         
-                        <div class="service-card interactive-el">
+                        <div class="service-card interactive-el reveal-el" style="transition-delay: 0.4s;">
                             <div class="service-icon">IV</div>
                             <h3 class="heading-3">Capacitação Digital</h3>
                             <p>Treinamento para o psicólogo aprender a operar as próprias ferramentas com segurança e autonomia.</p>
@@ -472,30 +420,73 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- PÁGINA 4: POSICIONAMENTO E RODAPÉ          -->
+    <!-- PÁGINA 4: PROCESSO (Nova Página)           -->
+    <!-- ========================================== -->
+    <div class="page" id="p-processo">
+        <div class="page-content-wrap">
+            <section class="section container">
+                <div class="services-header reveal-el" style="transition-delay: 0s;">
+                    <span class="tag">COMO FUNCIONA</span>
+                    <h2 class="heading-2">Do primeiro contato à entrega.</h2>
+                    <p class="text-lead" style="margin-top: 1rem;">Um passo a passo estruturado para entender e resolver os gargalos do seu consultório.</p>
+                </div>
+
+                <div class="process-grid">
+                    <div class="process-card reveal-el" style="transition-delay: 0.1s;">
+                        <span class="process-number">01</span>
+                        <h3 class="heading-3">Conversa</h3>
+                        <p>Ouvimos com calma o que já existe, o que falta e onde você quer chegar. Sem pressa, sem formulário.</p>
+                    </div>
+                    
+                    <div class="process-card reveal-el" style="transition-delay: 0.2s;">
+                        <span class="process-number">02</span>
+                        <h3 class="heading-3">Diagnóstico</h3>
+                        <p>Mapeamos os pontos de atrito na rotina administrativa — o que está tomando tempo que deveria ser do paciente.</p>
+                    </div>
+
+                    <div class="process-card reveal-el" style="transition-delay: 0.3s;">
+                        <span class="process-number">03</span>
+                        <h3 class="heading-3">Proposta</h3>
+                        <p>Apresentamos exatamente o que faz sentido pro seu consultório — nada além do necessário, nada aquém.</p>
+                    </div>
+
+                    <div class="process-card reveal-el" style="transition-delay: 0.4s;">
+                        <span class="process-number">04</span>
+                        <h3 class="heading-3">Construção</h3>
+                        <p>Site, automações ou gestão são implementados com acompanhamento próximo, sem você precisar mexer em nada sozinho.</p>
+                    </div>
+
+                    <div class="process-card reveal-el" style="transition-delay: 0.5s;">
+                        <span class="process-number">05</span>
+                        <h3 class="heading-3">Entrega</h3>
+                        <p>Estrutura no ar, testada e explicada — você entende exatamente como tudo funciona antes de seguirmos.</p>
+                    </div>
+                </div>
+
+                <div class="process-cta reveal-el interactive-el" style="transition-delay: 0.6s;">
+                    <p>A primeira conversa é sem compromisso — só pra ver se faz sentido trabalharmos juntos.</p>
+                    <button onclick="goTo('contato')" class="btn-light magnetic-el">Falar conosco</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 5: POSICIONAMENTO E RODAPÉ          -->
     <!-- ========================================== -->
     <div class="page" id="p-posicionamento">
         <div class="page-content-wrap">
             <section class="section container diff-section">
-                <span class="tag">POSICIONAMENTO</span>
-                <blockquote>
-                    "Em um mercado onde agências genéricas vendem 'marketing para psicólogos', o Alicerce Psi é a única opção que recusa essa linguagem por princípio."
+                <span class="tag reveal-el" style="transition-delay: 0s;">POSICIONAMENTO</span>
+                <blockquote class="reveal-el" style="transition-delay: 0.1s;">
+                    "Não prometemos crescimento acelerado. Prometemos estrutura — e estrutura é o que sustenta uma clínica bem exercida, por muito tempo."
                 </blockquote>
-                <p class="text-lead">
-                    A marca não promete crescimento acelerado. Promete estrutura. E estrutura é o que o psicólogo que quer exercer bem a clínica realmente precisa.
+                <p class="text-lead reveal-el" style="transition-delay: 0.2s;">
+                    Saúde mental não se vende. O que se constrói, com cuidado, é tudo o que fica ao redor dela — pra que ela possa acontecer com mais estabilidade.
                 </p>
-                
-                <!-- Ecossistema Digital Unificado -->
-                <div class="ecosystem-banner interactive-el">
-                    <h3 class="heading-3">Ecossistema Digital Unificado</h3>
-                    <p>A presença digital do seu consultório vai além do site. Ela se estende a um perfil profissional otimizado, mantendo a mesma autoridade e organização visual em todos os pontos de contato com o paciente.</p>
-                    <a href="https://instagram.com/alicercepsi" target="_blank" class="btn-instagram magnetic-el">
-                        Acompanhe no Instagram
-                    </a>
-                </div>
             </section>
 
-            <footer class="footer container">
+            <footer class="footer container reveal-el" style="transition-delay: 0.3s;">
                 <div class="footer-grid">
                     <div class="footer-brand">
                         <div class="logo">
@@ -519,28 +510,73 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- PÁGINA 6: CONTATO                          -->
+    <!-- ========================================== -->
+    <div class="page" id="p-contato">
+        <div class="page-content-wrap" style="justify-content: center;">
+            <section class="section container">
+                <div class="contact-wrap interactive-el">
+                    <div class="contact-header reveal-el" style="transition-delay: 0s;">
+                        <span class="tag">VAMOS CONVERSAR</span>
+                        <h2 class="heading-2">Inicie a estruturação do seu consultório.</h2>
+                    </div>
+                    
+                    <form action="https://formspree.io/f/xnjkrblq" method="POST">
+                        <div class="form-group reveal-el" style="transition-delay: 0.1s;">
+                            <label for="nome">Seu Nome Completo</label>
+                            <input type="text" id="nome" name="Nome" class="form-control" required placeholder="Ex: Dr(a). João Silva">
+                        </div>
+                        
+                        <div class="form-group reveal-el" style="transition-delay: 0.2s;">
+                            <label for="email">E-mail Profissional</label>
+                            <input type="email" id="email" name="Email" class="form-control" required placeholder="seuemail@exemplo.com">
+                        </div>
+                        
+                        <div class="form-group reveal-el" style="transition-delay: 0.3s;">
+                            <label for="servico">Qual serviço mais te interessa?</label>
+                            <select id="servico" name="Serviço Desejado" class="form-control" required>
+                                <option value="" disabled selected>Escolha uma opção...</option>
+                                <option value="Site Profissional">Site Profissional</option>
+                                <option value="Automações">Automações (Agendamento/Lembretes)</option>
+                                <option value="Gestão do Consultório">Gestão do Consultório (Painel Financeiro)</option>
+                                <option value="Capacitação Digital">Capacitação Digital</option>
+                                <option value="Pacote Completo">Pacote Completo</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group reveal-el" style="transition-delay: 0.4s;">
+                            <label for="mensagem">Detalhes adicionais (Opcional)</label>
+                            <textarea id="mensagem" name="Mensagem" class="form-control" placeholder="Descreva brevemente qual é a maior dificuldade administrativa do seu consultório hoje..."></textarea>
+                        </div>
+                        
+                        <div class="reveal-el" style="transition-delay: 0.5s;">
+                            <button type="submit" class="btn-submit magnetic-el">Enviar Solicitação</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+
     <!-- ─── JAVASCRIPT DA SPA E INTERAÇÕES ─── -->
     <script>
-        // ── Custom Cursor ──
+        // Custom Cursor
         const cursor = document.getElementById('custom-cursor');
-        
         if (window.matchMedia("(pointer: fine)").matches) {
             document.addEventListener('mousemove', e => {
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
             });
-            
-            // Hover effect em links e elementos iterativos
             const addHover = () => cursor.classList.add('hover');
             const removeHover = () => cursor.classList.remove('hover');
             
-            const interactiveElements = document.querySelectorAll('button, a, .interactive-el, .magnetic-el, .logo');
+            const interactiveElements = document.querySelectorAll('button, a, .interactive-el, .magnetic-el, .logo, select, input, textarea');
             interactiveElements.forEach(el => {
                 el.addEventListener('mouseenter', addHover);
                 el.addEventListener('mouseleave', removeHover);
             });
             
-            // ── Magnetic Buttons (Micro-interação) ──
             const magneticElements = document.querySelectorAll('.magnetic-el');
             magneticElements.forEach(el => {
                 el.addEventListener('mousemove', function(e) {
@@ -555,17 +591,14 @@
             });
         }
 
-        // ── Theme Toggle (Modo Escuro) ──
+        // Theme Toggle
         const themeBtn = document.getElementById('theme-btn');
         const themeIcon = document.getElementById('theme-icon');
-        
         themeBtn.addEventListener('click', () => {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             html.setAttribute('data-theme', newTheme);
-            
-            // Troca ícone animado (SVG Path)
             if(newTheme === 'dark') {
                 themeIcon.innerHTML = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
             } else {
@@ -573,15 +606,34 @@
             }
         });
 
-        // ── Scroll Header ──
+        // Scroll Header
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
 
-        // ── SPA Logic ──
-        const PAGES = ['home', 'sobre', 'servicos', 'posicionamento'];
+        // ─── LÓGICA DE REVELAÇÃO (INTERSECTION OBSERVER) ───
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // Se o elemento entrar na tela (ou já estiver lá ao carregar)
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Opcional: Descomente a linha abaixo se quiser que a animação aconteça só uma vez por elemento
+                    // revealObserver.unobserve(entry.target); 
+                }
+            });
+        }, { 
+            // Margem ajustada para garantir que elementos no topo ou já visíveis disparem a animação
+            rootMargin: "50px 0px 0px 0px", 
+            threshold: 0.1 
+        });
+
+        // Inicia observação em todos os elementos com a classe
+        document.querySelectorAll('.reveal-el').forEach(el => revealObserver.observe(el));
+
+        // ─── SPA LOGIC (Atualizado com Processo e Reset do Reveal) ───
+        const PAGES = ['home', 'sobre', 'servicos', 'processo', 'posicionamento', 'contato'];
         let current = 'home';
         let transitioning = false;
 
@@ -594,12 +646,29 @@
             
             setTimeout(() => {
                 document.getElementById('p-' + current).classList.remove('active');
+                
+                // Remove a classe visible da nova página ANTES de mostrá-la para reiniciar a animação
+                document.querySelectorAll('#p-' + id + ' .reveal-el').forEach(el => {
+                    el.classList.remove('visible');
+                });
+                
                 document.getElementById('p-' + id).classList.add('active');
                 document.getElementById('p-' + id).scrollTop = 0;
                 
                 current = id;
                 updateNav();
                 
+                // Força o navegador a recalcular a tela e disparar as animações dos itens que já estão visíveis no novo carregamento
+                setTimeout(() => {
+                    document.querySelectorAll('#p-' + id + ' .reveal-el').forEach(el => {
+                        // Uma verificação manual rápida para os elementos que já estão na tela
+                        const rect = el.getBoundingClientRect();
+                        if(rect.top < window.innerHeight && rect.bottom >= 0) {
+                            el.classList.add('visible');
+                        }
+                    });
+                }, 50);
+
                 ov.className = 'overlay out';
                 setTimeout(() => { ov.className = 'overlay'; transitioning = false; }, 600);
             }, 600);
@@ -614,7 +683,7 @@
             });
         }
 
-        // ── Mobile Menu ──
+        // Mobile Menu
         function toggleMenu() {
             document.getElementById('hamburger').classList.toggle('open');
             document.getElementById('mobileMenu').classList.toggle('open');
@@ -625,7 +694,7 @@
             goTo(id);
         }
 
-        // ── Swipe Navigation ──
+        // Swipe Navigation
         let tx = 0;
         document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive: true});
         document.addEventListener('touchend', e => {
@@ -636,7 +705,7 @@
             if (d < -70) goTo(PAGES[Math.max(i - 1, 0)]);
         }, {passive: true});
 
-        // ── Vídeo com Autoplay Visível ──
+        // Autoplay Video
         const video = document.getElementById('hero-video');
         if (video) {
             const observer = new IntersectionObserver((entries) => {
