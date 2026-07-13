@@ -148,11 +148,38 @@
         .mobile-menu button.active, .mobile-menu button:hover { opacity: 1; color: var(--color-accent); }
         @media(max-width: 768px) { .nav-links { display: none; } .nav-tools { gap: 1rem; } .hamburger { display: flex; } .mobile-menu { display: flex; } }
 
-        /* ─── HERO E HOME FOOTER ─── */
+        /* ─── HERO E ANIMAÇÃO DO TRIÂNGULO CSS/SVG ─── */
         .hero { text-align: center; margin-bottom: 2rem; }
-        .hero__video-wrapper { margin-top: clamp(2rem, 6vw, 4rem); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); width: 100%; max-width: 900px; margin-left: auto; margin-right: auto; background-color: var(--color-bg-secondary); aspect-ratio: 16 / 9; position: relative; transition: box-shadow var(--transition-base), background-color var(--transition-base); }
-        .hero__video-wrapper video { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+        .hero__animation-wrapper { 
+            margin: clamp(3rem, 8vw, 5rem) auto; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 180px; 
+        }
+        .animated-triangle { 
+            width: 140px; height: 140px; 
+            overflow: visible; 
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.05)); 
+        }
+        [data-theme="dark"] .animated-triangle { filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3)); }
         
+        .tri-top { animation: float-top 6s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; transform-origin: 50% 30%; fill: var(--color-text-main); }
+        .tri-left { animation: float-left 6s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; transform-origin: 30% 70%; fill: var(--color-text-main); }
+        .tri-right { animation: float-right 6s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; transform-origin: 70% 70%; fill: var(--color-accent); }
+        
+        @keyframes float-top { 
+            0%, 15%, 85%, 100% { transform: translate(0, 0) rotate(0); opacity: 1; } 
+            45%, 55% { transform: translate(0, -25px) rotate(8deg); opacity: 0.85; } 
+        }
+        @keyframes float-left { 
+            0%, 15%, 85%, 100% { transform: translate(0, 0) rotate(0); opacity: 1; } 
+            45%, 55% { transform: translate(-20px, 15px) rotate(-12deg); opacity: 0.85; } 
+        }
+        @keyframes float-right { 
+            0%, 15%, 85%, 100% { transform: translate(0, 0) rotate(0); opacity: 1; } 
+            45%, 55% { transform: translate(20px, 15px) rotate(12deg); opacity: 0.85; } 
+        }
+        
+        /* ─── HOME FOOTER ─── */
         .home-simple-footer { margin-top: auto; padding: 2rem 0; text-align: center; font-family: var(--font-body); border-top: 1px solid var(--color-border); }
         .home-simple-footer p { font-size: 0.9rem; color: var(--color-text-muted); margin: 0.5rem 0; }
         .home-simple-footer strong { color: var(--color-text-main); font-weight: 600; }
@@ -181,7 +208,7 @@
         .service-list li { font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem; position: relative; line-height: 1.6; text-align: center; }
         .service-list li::before { content: '—'; position: relative; color: var(--color-accent); margin-right: 5px; }
 
-        /* ─── PROCESSO SECTION (Cards centralizados) ─── */
+        /* ─── PROCESSO SECTION ─── */
         .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .process-card { background: var(--color-bg-secondary); padding: 3rem 1.5rem; border-radius: var(--radius-md); position: relative; overflow: hidden; border: 1px solid var(--color-border); transition: transform 0.3s, background-color var(--transition-base); text-align: center; }
         .process-number { font-family: var(--font-heading); font-size: 8rem; font-style: italic; color: var(--color-accent); opacity: 0.05; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); line-height: 1; pointer-events: none; z-index: 0; }
@@ -217,12 +244,11 @@
 
         /* ─── AJUSTES MOBILE EXCLUSIVOS ─── */
         @media (max-width: 768px) {
-            .container { padding: 0 1.5rem; } /* Margem segura para não colar na borda */
+            .container { padding: 0 1.5rem; }
             .services-bg { margin: 0; border-radius: 0; padding: 4rem 0; }
             .service-card { padding: 2.5rem 1.5rem; }
             .diff-section blockquote { font-size: 1.8rem; }
             
-            /* Centralizando o Footer no mobile */
             .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
             .footer-info { text-align: center; }
             .footer-brand .logo { justify-content: center; }
@@ -301,12 +327,15 @@
                         <h1 class="heading-1 reveal-el" style="transition-delay: 0.1s;">Cuidamos da <em>estrutura</em>,<br>você cuida das pessoas.</h1>
                         <p class="text-lead reveal-el" style="transition-delay: 0.2s;">Construímos a base digital e administrativa do seu consultório.</p>
                         
-                        <div class="hero__video-wrapper interactive-el reveal-el" style="transition-delay: 0.3s;">
-                            <video id="hero-video" muted playsinline loop preload="metadata">
-                                <source src="video-animacao.mp4" type="video/mp4">
-                                Seu navegador não suporta vídeos.
-                            </video>
+                        <!-- NOVA ANIMAÇÃO CSS DO TRIÂNGULO -->
+                        <div class="hero__animation-wrapper interactive-el reveal-el" style="transition-delay: 0.3s;">
+                            <svg class="animated-triangle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <polygon class="tri-piece tri-top" points="50,10 30,50 70,50" />
+                                <polygon class="tri-piece tri-left" points="30,50 10,90 50,90" />
+                                <polygon class="tri-piece tri-right" points="70,50 50,90 90,90" />
+                            </svg>
                         </div>
+
                     </div>
                 </section>
             </div>
@@ -620,7 +649,7 @@
             else header.classList.remove('scrolled');
         });
 
-        // ─── LÓGICA DE REVELAÇÃO (INTERSECTION OBSERVER) ───
+        // LÓGICA DE REVELAÇÃO (INTERSECTION OBSERVER)
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -631,7 +660,7 @@
 
         document.querySelectorAll('.reveal-el').forEach(el => revealObserver.observe(el));
 
-        // ─── SPA LOGIC ───
+        // SPA LOGIC
         const PAGES = ['home', 'sobre', 'servicos', 'processo', 'posicionamento', 'contato'];
         let current = 'home';
         let transitioning = false;
@@ -700,21 +729,6 @@
             if (d > 70) goTo(PAGES[Math.min(i + 1, PAGES.length - 1)]);
             if (d < -70) goTo(PAGES[Math.max(i - 1, 0)]);
         }, {passive: true});
-
-        // Autoplay Video
-        const video = document.getElementById('hero-video');
-        if (video) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && current === 'home') {
-                        video.play().catch(() => {});
-                    } else {
-                        video.pause();
-                    }
-                });
-            }, { threshold: 0.1 });
-            observer.observe(video);
-        }
     </script>
 </body>
 </html>
